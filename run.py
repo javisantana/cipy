@@ -13,7 +13,7 @@ Build = model('Build', date='str', result='int', output='str')
 def cmd(l, cwd = None):
   """ execute a system command """
   p = subprocess.Popen(" ".join(l), cwd=cwd, shell=True, bufsize=2048, stdout=subprocess.PIPE, stderr=subprocess.STDOUT);
-  data = p.stdout.read()
+  data = p.stdout.read().decode('utf-8')
   retcode = p.wait()
   return (data, retcode)
 
@@ -27,7 +27,7 @@ def build(web):
     data = "ci/build doesn't exist"
   Build(date=datetime.datetime.now().ctime(), result=ret, output=data).save();
 
-  return data;
+  return data.encode('utf-8');
 
 @route('/')
 def index(web):
