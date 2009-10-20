@@ -10,7 +10,7 @@ cipy uses the same aproach than git, svn and other SCM, use a special folder cal
 Installation
 ------------
 
-For the moment, cipy only runs on Linux (and maybe on macos and other unix tastes) and you need to install the following requirements:
+For the moment, cipy only runs on Linux (and maybe on macos and other unix flavours) and you need to install the following requirements:
     $ python >= 2.5
     $ juno (mini web framework)
     $ SQLAlchemy (for models)
