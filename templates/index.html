@@ -10,6 +10,22 @@
             out = $(this).attr('id');
             $("#"+out+"_output").toggle();
           });
+
+          //reload page after schedule a build
+          $("#build").click(function(){
+            $.post("/build",callback=function(data) {
+                $("#build_msg").html(data);
+                location.reload();
+            });
+          });
+
+          //refresh page when a build is active
+          if($('.building').length != 0)
+          {
+            setInterval(function(){ 
+              location.reload();
+            },30*1000);
+          }
        });
     </script>
 
@@ -18,10 +34,13 @@
             body { margin: auto; padding:0 3em; font-family:arial,sans-serif; width:48em; font-size:20px; letter-spacing: -1px; }
             #content { margin-left: auto; margin-top: 30px; padding:0 3em;  text-align:left; background-color:#FFFFFF;}
             h1 { font-size: 50px; letter-spacing: -5px; font-weight: bold;}
-            .date { letter-spacing: -2px; font-weight: bold; color:#CCCCCC;}
-            .ok { color:#00FF0F; letter-spacing: -2px; font-weight: bold; }
-            .fail{ color:#FF0000; }
+            .date { letter-spacing: -2px; font-weight: bold; color:#CCCCCC; margin-right: 15px;}
+            .ok { color:#00FF0F; letter-spacing: -2px; font-weight: bold; margin-right: 15px;}
+            .fail{ color:#FF0000;  margin-right: 15px;  }
             a { color:#4183C4; }
+            .output { font-family: courier new; font-size: 14px; letter-spacing:0px; border: 1px; margin:20px;
+background-color:#F8F8F8; border:1px solid #DEDEDE; padding: 20px;}
+            
     </style>
     <title>cipy</title>
 </head>
@@ -42,11 +61,11 @@
                 {{b.output}}
             </div>
           {% else %}
-          building...
+          <span class="building">building...</span>
           {% endif %}
       {% endfor %}
       </ul>
-      <a href="/build">build</a>
+      <a id="build" href="#">build</a><div id="build_msg"></div>
     </div>
 </body>
 </html>

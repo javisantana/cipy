@@ -49,7 +49,7 @@ def build(web):
       build_cmd = join(".", CIPY_FOLDER, "build");
       data, ret = cmd([build_cmd], repo_path);
       b.result = ret;
-      b.output = data;
+      b.output = data.replace("\n", "<br />");
     else:
       b.output = "%s file not found, i don't know how to build" % build_cmd
     b.finished = True;
@@ -62,7 +62,7 @@ def build(web):
 
 @route('/')
 def index(web):
-  builds = find(Build).all();
+  builds = find(Build).order_by(Build.id.desc()).all();
   template("index.html", { 'builds': builds })
   
 
