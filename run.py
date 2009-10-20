@@ -64,7 +64,8 @@ def build_work(b):
     else:
       b.output = "%s file not found, i don't know how to build" % join(CIPY_FOLDER, "build");
     b.finished = True;
-    finished_jobs.put(b)
+    #finished_jobs.put(b)
+    b.save()
     # hooks
     if ret == 0:
       exec_ci_cmd("build_pass");
@@ -74,7 +75,7 @@ def build_work(b):
   
 @route('/build')
 def build(web):
-  save_pending_jobs();
+  #save_pending_jobs();
 
   #get revision
   data, ret = cmd(scm_cmds[repo_type]['rev'], repo_path);
@@ -88,7 +89,7 @@ def build(web):
 
 @route('/')
 def index(web):
-  save_pending_jobs();
+  #save_pending_jobs();
   builds = find(Build).order_by(Build.id.desc()).limit(10).all();
   template("index.html", { 'builds': builds, 'project_path': repo_path })
   
