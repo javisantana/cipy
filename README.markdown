@@ -11,10 +11,10 @@ Installation
 ------------
 
 For the moment, cipy only runs on Linux (and maybe on macos and other unix tastes) and you need to install the following requirements:
-    * python >= 2.5
-    * juno (mini web framework)
-    * SQLAlchemy (for models)
-    * jinja2 (html template library)
+    $ python >= 2.5
+    $ juno (mini web framework)
+    $ SQLAlchemy (for models)
+    $ jinja2 (html template library)
 
 juno, SQLAlchemy and jinja2 can be installed through pip
 
@@ -36,7 +36,7 @@ to raise a build use wget or other http client to call http://host:8000/build. Y
 
 You also can trigger a build by hand using the web interface.
 
-![cipy working](http://web2.twitpic.com/img/37398079-d018cad777d24a943eafb401b08e3f6a.4ade047c-scaled.png)
+you can see a [screenshot](http://web2.twitpic.com/img/37398079-d018cad777d24a943eafb401b08e3f6a.4ade047c-scaled.png) :)
 
 TODO
 ----
@@ -45,6 +45,8 @@ TODO
 [ ] windows version 
 [ ] improve my written english skills
 
+
+javisantana, qualopec (a) gmail.com | @javisantana
 
 
 
