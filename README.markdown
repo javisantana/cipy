@@ -36,14 +36,14 @@ to raise a build use wget or other http client to call http://host:8000/build. Y
 
 You also can trigger a build by hand using the web interface.
 
-you can see a [screenshot](http://web2.twitpic.com/img/37398079-d018cad777d24a943eafb401b08e3f6a.4ade047c-scaled.png) :)
+you can see a [screenshot](http://web2.twitpic.com/m9kjj) (if you're a real man)
 
 TODO
 ----
-[ ] add cmd line configuration parameters
-[ ] support more than a repository
-[ ] windows version 
-[ ] improve my written english skills
+    [ ] add cmd line configuration parameters
+    [ ] support more than a repository
+    [ ] windows version 
+    [ ] improve my written english skills
 
 
 javisantana, qualopec (a) gmail.com | @javisantana
