@@ -5,7 +5,7 @@ A *really* small quick'n'dirty continuous integration written in python.
 
 cipy is language independent, it only execute a command and checks the return value , 0 = PASS, FAIL otherwise.
 
-cipy uses the same aproach than git, svn and other SCM, use a special folder called .ci when the commands that will be executed to build are stored.
+cipy uses the same aproach than git, svn and other SCM, use a special folder called .ci where the commands that will be executed to build are stored.
 
 Installation
 ------------
