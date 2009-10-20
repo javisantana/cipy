@@ -11,10 +11,10 @@ Installation
 ------------
 
 For the moment, cipy only runs on Linux (and maybe on macos and other unix tastes) and you need to install the following requirements:
-   * python >= 2.5
-   * juno (mini web framework)
-   * SQLAlchemy (for models)
-   * jinja2 (html template library)
+    * python >= 2.5
+    * juno (mini web framework)
+    * SQLAlchemy (for models)
+    * jinja2 (html template library)
 
 juno, SQLAlchemy and jinja2 can be installed through pip
 
@@ -22,14 +22,14 @@ Usage
 -----
 
 cipy doesn't need installation, only clone this repository and run!:
-  $ git clone git://github.com/javisantana/cipy.git
-  $ cd cipy
-  $ python run.py /path/to/repo
+    $ git clone git://github.com/javisantana/cipy.git
+    $ cd cipy
+    $ python run.py /path/to/repo
   
 repo must be owned by cipy because it performs reset/update and you could loss your work if you're working in the same copy.
 once cipy has started you can open your favorite browser and point it to http://localhost:8000
 
-.ci folder must exists in the repo root and a file called `build` with execution permissions is the file that will be called in each build.
+.ci folder must exists in the repo root and a file called `build` (inside it) with execution permissions.This is the file that will be called in each build.
 
 to raise a build use wget or other http client to call http://host:8000/build. You can put this statement inside post-commit-hook in svn or inside post-recieve-hook in git:
     $ wget http://host:8000/build -O/dev/null
