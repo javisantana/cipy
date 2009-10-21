@@ -34,6 +34,8 @@
             body { margin: auto; padding:0 3em; font-family:arial,sans-serif; width:48em; font-size:20px; letter-spacing: -1px; }
             #content { margin-left: auto; margin-top: 30px; padding:0 3em;  text-align:left; background-color:#FFFFFF;}
             h1 { font-size: 50px; letter-spacing: -5px; font-weight: bold;}
+            h2 { font-size: 25px; font-weight: thin; font-family: courier-new; letter-spacing: 0px; color: #555555;
+                  border-bottom: 1px solid #999999; }
             .date { letter-spacing: -2px; font-weight: bold; color:#CCCCCC; margin-right: 15px;}
             .ok { color:#00FF0F; letter-spacing: -2px; font-weight: bold; margin-right: 15px;}
             .fail{ color:#FF0000;  margin-right: 15px;  }
@@ -47,6 +49,7 @@ background-color:#F8F8F8; border:1px solid #DEDEDE; padding: 20px;}
 <body>
     <div id="content">
       <h1> BUILDS</h1>
+      <h2> {{project_path}}</h2>
       <ul id="navigation">
       {% for b in builds%}
           <li><span class="date">{{b.date}}</span> 

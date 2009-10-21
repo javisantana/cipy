@@ -76,7 +76,7 @@ def build(web):
 @route('/')
 def index(web):
   builds = find(Build).order_by(Build.id.desc()).all();
-  template("index.html", { 'builds': builds })
+  template("index.html", { 'builds': builds, 'project_path': repo_path })
   
 
 if __name__ == '__main__':
