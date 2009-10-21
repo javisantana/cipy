@@ -5,6 +5,7 @@ import subprocess
 import datetime;
 import threading;
 import os
+import sys
 
 CIPY_FOLDER = ".ci"
 
@@ -37,6 +38,14 @@ def cmd(l, cwd = None):
   retcode = p.wait()
   return (data, retcode)
   
+def exec_ci_cmd(cmd):
+  """execute a comand inside .ci folder and return result"""
+  if exists(join(repo_path, CIPY_FOLDER, cmd)):
+    build_cmd = join(".", CIPY_FOLDER, cmd);
+    return cmd([build_cmd], repo_path);
+  return (None, None)
+    
+  
 @route('/build')
 def build(web):
   cmd(update_cmds[repo_type], repo_path);
@@ -45,16 +54,20 @@ def build(web):
   # i was using a thread before but sqlite doesn't support access to same object from different threads
   pid = os.fork();
   if pid == 0:
-    if exists(join(repo_path, CIPY_FOLDER, "build")):
-      build_cmd = join(".", CIPY_FOLDER, "build");
-      data, ret = cmd([build_cmd], repo_path);
+    data, ret = dataexec_ci_cmd("build");
+    if ret != None:
       b.result = ret;
       b.output = data.replace("\n", "<br />");
     else:
-      b.output = "%s file not found, i don't know how to build" % build_cmd
+      b.output = "%s file not found, i don't know how to build" % join(CIPY_FOLDER, "build");
     b.finished = True;
     b.save();
-    #TODO call success and fail hooks
+
+    # hooks
+    if ret == 0:
+      exec_ci_cmd("build_pass");
+    else:
+      exec_ci_cmd("build_failed");
     sys.exit()
   else:
     return "scheduled!"
