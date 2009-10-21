@@ -38,10 +38,10 @@ def cmd(l, cwd = None):
   retcode = p.wait()
   return (data, retcode)
   
-def exec_ci_cmd(cmd):
+def exec_ci_cmd(c):
   """execute a comand inside .ci folder and return result"""
-  if exists(join(repo_path, CIPY_FOLDER, cmd)):
-    build_cmd = join(".", CIPY_FOLDER, cmd);
+  if exists(join(repo_path, CIPY_FOLDER, c)):
+    build_cmd = join(".", CIPY_FOLDER, c);
     return cmd([build_cmd], repo_path);
   return (None, None)
     
