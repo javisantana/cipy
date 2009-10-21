@@ -54,7 +54,7 @@ def build(web):
   pid = os.fork();
   if pid == 0:
     cmd(update_cmds[repo_type], repo_path);
-    data, ret = dataexec_ci_cmd("build");
+    data, ret = exec_ci_cmd("build");
     if ret != None:
       b.result = ret;
       b.output = data.replace("\n", "<br />");
