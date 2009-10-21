@@ -86,7 +86,7 @@ def build(web):
 def kill_zombies():
   try:
     while 1:
-            os.waitpid(0, 0);
+            os.waitpid(0, os.WNOHANG)
   except:
     pass
 
