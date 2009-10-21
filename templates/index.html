@@ -55,6 +55,7 @@ background-color:#F8F8F8; border:1px solid #DEDEDE; padding: 20px;}
       {% for b in builds%}
           <li><span class="date">{{b.date}}</span> 
           {% if b.finished %}
+            rev: {% b.rev %}
             {% if b.result == 0 %}
             <span class="ok">PASS</span>
             {% else %}

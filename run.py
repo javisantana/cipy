@@ -21,14 +21,22 @@ def get_repo_type(path):
     return "svn";
   return None
 
-update_cmds = { 'git': ["git", "reset", "--hard"], 
-                'svn': ["svn", "update"] 
+scm_cmds = { 'git': 
+                  {   
+                    'reset':["git", "reset", "--hard"], 
+                    'rev':["git", "rev-parse", "HEAD"] 
+                  }
+                'svn': 
+                  {   
+                    'reset':["svn", "update"], 
+                    'rev':["svnversion"] 
+                  }
               };
 
 #init juno
 init({'db_location': 'cipy.db'})
 
-Build = model('Build', date='str', result='int', output='str', finished='boolean');
+Build = model('Build', date='str', result='int', output='str', finished='boolean', rev='str');
 
 def cmd(l, cwd = None):
   """ execute a system command """
@@ -48,12 +56,13 @@ def exec_ci_cmd(c):
   
 @route('/build')
 def build(web):
-  b = Build(date=datetime.datetime.now().strftime("%b%d %H:%M"), finished=False)
+  ret, data = cmd(scm_cmds[repo_type]['rev'], repo_path);
+  b = Build(date=datetime.datetime.now().strftime("%b%d %H:%M"), finished=False, rev=data)
   b.save();
   # i was using a thread before but sqlite doesn't support access to same object from different threads
   pid = os.fork();
   if pid == 0:
-    cmd(update_cmds[repo_type], repo_path);
+    cmd(scm_cmds[repo_type]['reset'], repo_path);
     data, ret = exec_ci_cmd("build");
     if ret != None:
       b.result = ret;
