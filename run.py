@@ -48,12 +48,12 @@ def exec_ci_cmd(cmd):
   
 @route('/build')
 def build(web):
-  cmd(update_cmds[repo_type], repo_path);
   b = Build(date=datetime.datetime.now().strftime("%b%d %H:%M"), finished=False)
   b.save();
   # i was using a thread before but sqlite doesn't support access to same object from different threads
   pid = os.fork();
   if pid == 0:
+    cmd(update_cmds[repo_type], repo_path);
     data, ret = dataexec_ci_cmd("build");
     if ret != None:
       b.result = ret;
