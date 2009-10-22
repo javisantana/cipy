@@ -6,12 +6,20 @@ import datetime;
 import threading;
 import os
 import sys
+from Queue import Queue
 
 CIPY_FOLDER = ".ci"
 
 repo_path = None
 repo_type = None
 
+finished_jobs = Queue();
+
+def save_pending_jobs():
+ while not finished_jobs.empty():
+     w = finished_jobs.get()
+     w.save();
+     finished_jobs.task_done()
 
 def get_repo_type(path):
   """ return repo type based on configuration folder, i.e .git, .svn """
@@ -21,16 +29,10 @@ def get_repo_type(path):
     return "svn";
   return None
 
-scm_cmds = { 'git': 
-                  {   
-                    'reset':["git", "reset", "--hard"], 
-                    'rev':["git", "rev-parse", "HEAD"] 
-                  },
-                'svn': 
-                  {   
-                    'reset':["svn", "update"], 
-                    'rev':["svnversion"] 
-                  }
+scm_cmds = { 'git': {'reset':["git", "reset", "--hard"], 
+                     'rev':["git", "rev-parse", "HEAD"]},
+                'svn': {'reset':["svn", "update"], 
+                        'rev':["svnversion"] }
               };
 
 #init juno
@@ -52,19 +54,8 @@ def exec_ci_cmd(c):
     build_cmd = join(".", CIPY_FOLDER, c);
     return cmd([build_cmd], repo_path);
   return (None, None)
-    
   
-@route('/build')
-def build(web):
-
-  kill_zombies(); #hack
-
-  data, ret = cmd(scm_cmds[repo_type]['rev'], repo_path);
-  b = Build(date=datetime.datetime.now().strftime("%b%d %H:%M"), finished=False, rev=data[:6])
-  b.save();
-  # i was using a thread before but sqlite doesn't support access to same object from different threads
-  pid = os.fork();
-  if pid == 0:
+def build_work(b):
     cmd(scm_cmds[repo_type]['reset'], repo_path);
     data, ret = exec_ci_cmd("build");
     if ret != None:
@@ -73,27 +64,31 @@ def build(web):
     else:
       b.output = "%s file not found, i don't know how to build" % join(CIPY_FOLDER, "build");
     b.finished = True;
-    b.save();
-
+    finished_jobs.put(b)
     # hooks
     if ret == 0:
       exec_ci_cmd("build_pass");
     else:
       exec_ci_cmd("build_failed");
-    os._exit(0);
+  
+  
+@route('/build')
+def build(web):
+  save_pending_jobs();
+
+  #get revision
+  data, ret = cmd(scm_cmds[repo_type]['rev'], repo_path);
+  b = Build(date=datetime.datetime.now().strftime("%b%d %H:%M"), finished=False, rev=data[:6])
+  b.save();
+
+  # launch build thread
+  threading.Thread(target=build_work, args=(b,)).start();
   return "scheduled!"
  
-def kill_zombies():
-  try:
-    while 1:
-            os.waitpid(0, os.WNOHANG)
-  except:
-    pass
 
 @route('/')
 def index(web):
-  # terminate pending forked process
-  kill_zombies();
+  save_pending_jobs();
   builds = find(Build).order_by(Build.id.desc()).limit(10).all();
   template("index.html", { 'builds': builds, 'project_path': repo_path })
   
